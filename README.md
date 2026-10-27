@@ -7,9 +7,9 @@ Aplicação web para importar extratos OFX, categorizar movimentações, conferi
 - Envio de arquivo OFX pelo navegador e pré-visualização antes de salvar.
 - Resumo de entradas, saídas, saldo e quantidade de movimentações.
 - Busca e filtro por categoria.
-- Exportação das movimentações exibidas em CSV ou Excel (.xlsx), incluindo as categorias ajustadas.
-- Categorização baseada nas descrições do OFX, com sugestões ajustadas aos tipos de movimentação encontrados no próprio arquivo.
-- Categorias oferecidas para despesas são derivadas das despesas daquele OFX, com “Outros” como opção geral; categorias sem relação com o extrato não são exibidas.
+- Exportação das movimentações exibidas em CSV, Excel (.xlsx) ou PDF, incluindo as categorias ajustadas.
+- Sugestões dinâmicas de categorias com base nos nomes das despesas do OFX, sem selecionar nenhuma automaticamente.
+- Escolha manual das sugestões ou criação de categorias próprias, disponíveis neste navegador nos próximos extratos.
 - Salvamento no banco, ignorando lançamentos repetidos conforme a restrição de unicidade existente.
 - Verificação da conexão com o banco pela interface.
 
@@ -54,5 +54,10 @@ O script `main.py` segue disponível para processar o arquivo `extrato.ofx` dire
 ## Notas
 
 Mantenha `.env` e extratos privados fora do Git. A API deve ser publicada em um serviço Python e o frontend em uma hospedagem estática para acesso público na internet; configure `VITE_API_URL` para o endereço da API e ajuste a origem CORS no `api.py` para o domínio do frontend.
+
+
+
+
+
 
 
