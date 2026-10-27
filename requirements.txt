@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+python-multipart
+ofxparse
+psycopg2-binary
+python-dotenv
+openpyxl

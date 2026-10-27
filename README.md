@@ -1,121 +1,58 @@
-# Projeto OFX - Leitura de Extratos Bancários com Python
+# Projeto OFX
 
-## Sobre o projeto
-
-Este projeto foi desenvolvido para realizar a leitura de arquivos OFX (Open Financial Exchange), utilizados em extratos bancários. O programa utiliza Python para ler as movimentações financeiras, calcular os totais de entradas e saídas e armazenar os dados em um banco de dados PostgreSQL hospedado no Neon.
+Aplicação web para importar extratos OFX, categorizar movimentações, conferir entradas e saídas e salvar os lançamentos no PostgreSQL (Neon). A interface é feita em React e a API em FastAPI; as credenciais do banco permanecem no backend.
 
 ## Funcionalidades
 
-- Leitura de arquivos OFX.
-- Exibição das movimentações financeiras.
-- Cálculo do total de entradas e saídas.
-- Cálculo do saldo das movimentações.
-- Armazenamento dos dados no PostgreSQL.
-- Prevenção de registros duplicados no banco de dados.
+- Envio de arquivo OFX pelo navegador e pré-visualização antes de salvar.
+- Resumo de entradas, saídas, saldo e quantidade de movimentações.
+- Busca e filtro por categoria.
+- Exportação das movimentações exibidas em CSV ou Excel (.xlsx), incluindo as categorias ajustadas.
+- Categorização baseada nas descrições do OFX, com sugestões ajustadas aos tipos de movimentação encontrados no próprio arquivo.
+- Categorias oferecidas para despesas são derivadas das despesas daquele OFX, com “Outros” como opção geral; categorias sem relação com o extrato não são exibidas.
+- Salvamento no banco, ignorando lançamentos repetidos conforme a restrição de unicidade existente.
+- Verificação da conexão com o banco pela interface.
 
-## Tecnologias utilizadas
+## Pré-requisitos
 
-- **Python:** processamento dos arquivos OFX.
-- **PostgreSQL:** armazenamento das movimentações financeiras.
-- **Neon:** hospedagem do banco de dados PostgreSQL.
-- **Psycopg2:** conexão entre Python e PostgreSQL.
-- **Python-dotenv:** gerenciamento das variáveis de ambiente.
-- **Git e GitHub:** versionamento e armazenamento do código-fonte.
+- Python 3.10 ou superior.
+- Node.js e npm.
+- Uma tabela `movimentacoes` no PostgreSQL com `data_movimentacao`, `valor`, `descricao`, `categoria` e restrição `UNIQUE (data_movimentacao, valor, descricao)`.
 
-## Estrutura do projeto
+## Configurar e iniciar
 
-```text
-ProjetoOFX/
-├── main.py
-├── conexao.py
-├── teste_conexao.py
-├── .gitignore
-├── .env
-├── extrato.ofx
-└── README.md
-```
+1. Configure a conexão do banco no arquivo `.env` na raiz:
 
-Os arquivos `.env`, `extrato.ofx` e a pasta do ambiente virtual não devem ser enviados ao GitHub quando contiverem credenciais ou dados privados.
+   ```env
+   DATABASE_URL="SUA_STRING_DE_CONEXAO_DO_NEON"
+   ```
 
-## Como executar o projeto
+2. Instale as dependências Python e inicie a API, em um terminal na raiz do projeto:
 
-### 1. Clonar o repositório
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate
+   pip install -r requirements.txt
+   uvicorn api:app --reload
+   ```
 
-```bash
-git clone https://github.com/joaocontin-byte/ProjetoOFX.git
-```
+3. Em outro terminal, também na raiz, instale as dependências do frontend e inicie o React:
 
-### 2. Entrar na pasta do projeto
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-```bash
-cd ProjetoOFX
-```
+4. Abra o endereço local mostrado pelo Vite (normalmente `http://localhost:5173`).
 
-### 3. Criar um ambiente virtual
+A API fica em `http://localhost:8000`; sua documentação interativa fica em `/docs`.
 
-```bash
-python -m venv venv
-```
+## Execução pelo terminal
 
-### 4. Ativar o ambiente virtual
+O script `main.py` segue disponível para processar o arquivo `extrato.ofx` diretamente.
 
-No Windows:
+## Notas
 
-```bash
-venv\Scripts\activate
-```
+Mantenha `.env` e extratos privados fora do Git. A API deve ser publicada em um serviço Python e o frontend em uma hospedagem estática para acesso público na internet; configure `VITE_API_URL` para o endereço da API e ajuste a origem CORS no `api.py` para o domínio do frontend.
 
-### 5. Instalar as dependências
 
-```bash
-pip install psycopg2-binary python-dotenv
-```
-
-### 6. Configurar a conexão com o banco de dados
-
-Crie um arquivo `.env` na pasta do projeto e adicione a variável de conexão:
-
-```env
-DATABASE_URL="SUA_STRING_DE_CONEXAO_DO_NEON"
-```
-
-Substitua o texto de exemplo pela string de conexão do seu banco Neon. Não compartilhe esse arquivo publicamente.
-
-### 7. Executar o programa
-
-```bash
-python main.py
-```
-
-## Banco de dados
-
-Os dados são armazenados em uma tabela chamada `movimentacoes`, que contém as seguintes informações:
-
-| Campo | Descrição |
-|---|---|
-| `id` | Identificador da movimentação |
-| `data_movimentacao` | Data da movimentação |
-| `valor` | Valor da movimentação |
-| `descricao` | Descrição da movimentação |
-
-O projeto também possui uma restrição para evitar a inserção de movimentações duplicadas.
-
-## Resultado esperado
-
-Na execução realizada durante o desenvolvimento, o programa processou 15 movimentações financeiras, apresentando os seguintes resultados:
-
-- **Entradas:** R$ 17.900,00
-- **Saídas:** R$ -6.059,70
-- **Saldo:** R$ 11.840,30
-
-Os valores acima correspondem ao arquivo OFX utilizado nos testes.
-
-## Objetivo acadêmico
-
-O objetivo deste projeto é praticar a leitura e o processamento de arquivos com Python, a conexão com bancos de dados PostgreSQL e o armazenamento de informações financeiras, utilizando ferramentas de versionamento de código.
-
-## Autor
-
-João Contin
-
-Repositório: https://github.com/joaocontin-byte/ProjetoOFX
